@@ -1,0 +1,23 @@
+[package]
+name = "argus-infrastructure"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+authors.workspace = true
+description = "Concrete Hexagonal adapters (Filesystem, Git2, Network, SQLite, Exporters) for Projeto ARGUS."
+
+[dependencies]
+argus-core.workspace = true
+chrono.workspace = true
+git2.workspace = true
+ignore.workspace = true
+netstat2.workspace = true
+rusqlite.workspace = true
+serde_json.workspace = true
+sysinfo.workspace = true
+tokio-util.workspace = true
+tracing.workspace = true
+
+[dev-dependencies]
+tempfile.workspace = true
