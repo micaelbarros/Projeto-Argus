@@ -16,7 +16,7 @@ edition = "2021"
 rust-version = "1.80"
 license = "MIT"
 authors = ["Projeto ARGUS Contributors"]
-repository = "https://github.com/micaelbarros/Projeto-Sentinela"
+repository = "https://github.com/micaelbarros/Projeto-Argus"
 description = "Projeto ARGUS — Local-first developer productivity and network observability CLI + TUI in Rust."
 
 [workspace.dependencies]
