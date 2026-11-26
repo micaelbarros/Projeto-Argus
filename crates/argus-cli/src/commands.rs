@@ -75,15 +75,19 @@ impl AppContainer {
 
 /// Dispatches the parsed CLI command with cooperative cancellation support.
 pub async fn execute(cli: Cli, cancel: CancellationToken) -> ArgusResult<()> {
+    let command = cli.command.clone().unwrap_or(Commands::Tui {
+        path: std::path::PathBuf::from("."),
+    });
+
     // Handle `init` before loading config so users can bootstrap cleanly
-    if matches!(cli.command, Commands::Init) {
+    if matches!(command, Commands::Init) {
         return handle_init(&cli);
     }
 
     let config = ArgusConfig::load(cli.config.as_deref())?;
     let container = AppContainer::build(config);
 
-    match &cli.command {
+    match &command {
         Commands::Init => unreachable!(),
         Commands::Doctor => handle_doctor(&cli, &container),
         Commands::Tui { path } => argus_tui::run_tui(

@@ -38,11 +38,12 @@ pub struct Cli {
     #[arg(long, global = true)]
     pub force: bool,
 
+    /// Subcomando a executar. Se omitido (ex.: duplo clique no .exe), abre o dashboard TUI.
     #[command(subcommand)]
-    pub command: Commands,
+    pub command: Option<Commands>,
 }
 
-#[derive(Debug, Subcommand)]
+#[derive(Debug, Clone, Subcommand)]
 pub enum Commands {
     /// Inicializa o arquivo de configuração padrão (config.toml) e o banco SQLite local.
     Init,
@@ -86,13 +87,13 @@ pub enum Commands {
     },
 }
 
-#[derive(Debug, Args)]
+#[derive(Debug, Clone, Args)]
 pub struct DevPilotArgs {
     #[command(subcommand)]
     pub command: DevPilotCommand,
 }
 
-#[derive(Debug, Subcommand)]
+#[derive(Debug, Clone, Subcommand)]
 pub enum DevPilotCommand {
     /// Analisa estrutura, linguagens, frameworks, dependências, TODOs e saúde do projeto.
     Analyze {
@@ -123,13 +124,13 @@ pub enum DevPilotCommand {
     },
 }
 
-#[derive(Debug, Args)]
+#[derive(Debug, Clone, Args)]
 pub struct NetScopeArgs {
     #[command(subcommand)]
     pub command: NetScopeCommand,
 }
 
-#[derive(Debug, Subcommand)]
+#[derive(Debug, Clone, Subcommand)]
 pub enum NetScopeCommand {
     /// Lista interfaces de rede disponíveis, estado e contadores acumulados.
     Interfaces,

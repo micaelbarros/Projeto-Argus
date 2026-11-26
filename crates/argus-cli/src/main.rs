@@ -24,6 +24,7 @@ async fn main() -> ExitCode {
         }
     });
 
+    let launched_without_args = cli.command.is_none();
     let verbose = cli.verbose;
     match commands::execute(cli, cancel).await {
         Ok(()) => ExitCode::SUCCESS,
@@ -35,6 +36,11 @@ async fn main() -> ExitCode {
                 );
             } else {
                 eprintln!("Erro: {}", err.friendly_message());
+            }
+            if launched_without_args {
+                eprintln!("\nPressione Enter para fechar...");
+                let mut _pause = String::new();
+                let _ = std::io::stdin().read_line(&mut _pause);
             }
             ExitCode::FAILURE
         }
