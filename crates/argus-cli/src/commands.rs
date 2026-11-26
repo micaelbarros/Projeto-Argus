@@ -73,10 +73,31 @@ impl AppContainer {
     }
 }
 
+/// Resolves the initial TUI directory when `argus` is launched without arguments.
+/// If launched directly from `target/release` or `target/debug` (e.g. double-clicking the `.exe`),
+/// walks up to the enclosing Cargo/Git project root so DevPilot inspects the actual source tree.
+fn resolve_default_tui_path() -> std::path::PathBuf {
+    let Ok(cwd) = std::env::current_dir() else {
+        return std::path::PathBuf::from(".");
+    };
+    let normalized = cwd
+        .to_string_lossy()
+        .replace('\\', "/")
+        .to_ascii_lowercase();
+    if normalized.ends_with("/target/release") || normalized.ends_with("/target/debug") {
+        if let Some(root) = cwd.parent().and_then(|p| p.parent()) {
+            if root.join("Cargo.toml").exists() || root.join(".git").exists() {
+                return root.to_path_buf();
+            }
+        }
+    }
+    cwd
+}
+
 /// Dispatches the parsed CLI command with cooperative cancellation support.
 pub async fn execute(cli: Cli, cancel: CancellationToken) -> ArgusResult<()> {
-    let command = cli.command.clone().unwrap_or(Commands::Tui {
-        path: std::path::PathBuf::from("."),
+    let command = cli.command.clone().unwrap_or_else(|| Commands::Tui {
+        path: resolve_default_tui_path(),
     });
 
     // Handle `init` before loading config so users can bootstrap cleanly
