@@ -11,6 +11,10 @@ description = "Command-line interface and entry point for Projeto ARGUS."
 name = "argus"
 path = "src/main.rs"
 
+[[test]]
+name = "cli_tests"
+path = "../../tests/cli_tests.rs"
+
 [dependencies]
 argus-core.workspace = true
 argus-devpilot.workspace = true
@@ -26,3 +30,9 @@ tokio.workspace = true
 tokio-util.workspace = true
 tracing.workspace = true
 tracing-subscriber.workspace = true
+
+[dev-dependencies]
+assert_cmd.workspace = true
+predicates.workspace = true
+serde_json.workspace = true
+tempfile.workspace = true

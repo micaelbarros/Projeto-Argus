@@ -83,6 +83,7 @@ license.workspace = true
 authors.workspace = true
 repository.workspace = true
 description.workspace = true
+autotests = false
 
 [dependencies]
 argus-core.workspace = true
@@ -101,6 +102,14 @@ serde_json.workspace = true
 git2.workspace = true
 chrono.workspace = true
 tokio-util.workspace = true
+
+[[test]]
+name = "devpilot_tests"
+path = "tests/devpilot_tests.rs"
+
+[[test]]
+name = "netscope_tests"
+path = "tests/netscope_tests.rs"
 
 [[bench]]
 name = "scanner_benchmark"
