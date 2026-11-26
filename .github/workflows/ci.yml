@@ -40,4 +40,4 @@ jobs:
         run: cargo test --workspace
 
       - name: Build release binary
-        run: cargo build --release --bin argus
+        run: cargo build --release -p argus-cli --bin argus

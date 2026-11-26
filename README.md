@@ -65,16 +65,16 @@ As dependências apontam sempre para o núcleo (`argus-core`), que não conhece 
 ### Compilar e executar localmente
 
 ```bash
-cargo build --release --bin argus
+cargo build --release -p argus-cli --bin argus
 ```
 
 Ou executar diretamente via Cargo:
 
 ```bash
-cargo run --bin argus -- --version
-cargo run --bin argus -- init
-cargo run --bin argus -- doctor
-cargo run --bin argus -- tui .
+cargo run -p argus-cli --bin argus -- --version
+cargo run -p argus-cli --bin argus -- init
+cargo run -p argus-cli --bin argus -- doctor
+cargo run -p argus-cli --bin argus -- tui .
 ```
 
 ---

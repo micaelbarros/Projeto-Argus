@@ -22,7 +22,7 @@ cargo test --workspace
 cargo bench --bench scanner_benchmark
 
 # Execução da CLI em desenvolvimento
-cargo run --bin argus -- devpilot analyze .
+cargo run -p argus-cli --bin argus -- devpilot analyze .
 ```
 
 ## Adicionando um Novo Analisador no DevPilot
