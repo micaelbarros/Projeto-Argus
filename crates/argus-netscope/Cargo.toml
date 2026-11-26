@@ -1,0 +1,15 @@
+[package]
+name = "argus-netscope"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+authors.workspace = true
+description = "NetScope network observability, traffic, latency, and diagnostics module for Projeto ARGUS."
+
+[dependencies]
+argus-core.workspace = true
+chrono.workspace = true
+serde.workspace = true
+tokio-util.workspace = true
+tracing.workspace = true
