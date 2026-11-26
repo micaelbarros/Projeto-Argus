@@ -57,7 +57,10 @@ impl ArgusError {
                 format!("Permissão insuficiente para concluir a operação: {msg}")
             }
             Self::InvalidPath { path, reason } => {
-                format!("O caminho '{}' não pode ser usado: {reason}", path.display())
+                format!(
+                    "O caminho '{}' não pode ser usado: {reason}",
+                    path.display()
+                )
             }
             Self::NetworkUnavailable(msg) => {
                 format!("Não foi possível acessar a rede solicitada: {msg}")

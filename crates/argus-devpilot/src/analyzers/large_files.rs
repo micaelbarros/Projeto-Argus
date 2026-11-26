@@ -15,6 +15,10 @@ pub fn detect_large_files(files: &[FileEntry], threshold_kb: u64) -> Vec<LargeFi
         })
         .collect();
 
-    findings.sort_by(|a, b| b.size_bytes.cmp(&a.size_bytes).then_with(|| a.path.cmp(&b.path)));
+    findings.sort_by(|a, b| {
+        b.size_bytes
+            .cmp(&a.size_bytes)
+            .then_with(|| a.path.cmp(&b.path))
+    });
     findings
 }

@@ -15,7 +15,11 @@ pub fn render(frame: &mut Frame<'_>, area: Rect, app: &ArgusTuiApp) {
     let sub_titles = ["Interfaces & Taxas", "Conexões TCP / UDP"];
     let sub_idx = app.netscope_subtab % sub_titles.len();
     let sub_tabs = Tabs::new(sub_titles)
-        .block(Block::default().borders(Borders::ALL).title(" NetScope (Tab para alternar) "))
+        .block(
+            Block::default()
+                .borders(Borders::ALL)
+                .title(" NetScope (Tab para alternar) "),
+        )
         .select(sub_idx)
         .highlight_style(app.theme.selected_tab_style());
     frame.render_widget(sub_tabs, chunks[0]);
@@ -66,8 +70,15 @@ pub fn render(frame: &mut Frame<'_>, area: Rect, app: &ArgusTuiApp) {
                 ],
             )
             .header(
-                Row::new(["Interface", "Estado", "RX Total", "TX Total", "RX/TX Taxa", "IPs"])
-                    .style(app.theme.header_style()),
+                Row::new([
+                    "Interface",
+                    "Estado",
+                    "RX Total",
+                    "TX Total",
+                    "RX/TX Taxa",
+                    "IPs",
+                ])
+                .style(app.theme.header_style()),
             )
             .block(
                 Block::default()

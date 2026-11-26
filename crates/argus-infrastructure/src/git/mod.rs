@@ -19,7 +19,11 @@ impl Git2Adapter {
 }
 
 impl GitRepositoryPort for Git2Adapter {
-    fn inspect_repository(&self, path: &Path, max_commits: usize) -> ArgusResult<Option<GitSummary>> {
+    fn inspect_repository(
+        &self,
+        path: &Path,
+        max_commits: usize,
+    ) -> ArgusResult<Option<GitSummary>> {
         let repo = match Repository::discover(path) {
             Ok(r) => r,
             Err(err) if err.code() == git2::ErrorCode::NotFound => return Ok(None),

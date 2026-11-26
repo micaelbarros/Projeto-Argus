@@ -15,4 +15,3 @@ chrono.workspace = true
 crossterm.workspace = true
 ratatui.workspace = true
 tokio-util.workspace = true
-tracing.workspace = true

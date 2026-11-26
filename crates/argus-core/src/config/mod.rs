@@ -7,7 +7,7 @@ use std::fs;
 use std::path::{Path, PathBuf};
 
 /// Top-level ARGUS configuration stored in TOML.
-#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
+#[derive(Debug, Clone, Default, Serialize, Deserialize, PartialEq)]
 #[serde(default)]
 pub struct ArgusConfig {
     pub general: GeneralConfig,
@@ -15,18 +15,6 @@ pub struct ArgusConfig {
     pub devpilot: DevPilotConfig,
     pub netscope: NetScopeConfig,
     pub storage: StorageConfig,
-}
-
-impl Default for ArgusConfig {
-    fn default() -> Self {
-        Self {
-            general: GeneralConfig::default(),
-            modules: ModulesConfig::default(),
-            devpilot: DevPilotConfig::default(),
-            netscope: NetScopeConfig::default(),
-            storage: StorageConfig::default(),
-        }
-    }
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]

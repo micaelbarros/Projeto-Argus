@@ -8,5 +8,9 @@ use std::path::Path;
 pub trait GitRepositoryPort: Send + Sync {
     /// Inspects repository metadata, working tree status, and up to `max_commits` history items.
     /// Returns `Ok(None)` if `path` is not inside a Git repository.
-    fn inspect_repository(&self, path: &Path, max_commits: usize) -> ArgusResult<Option<GitSummary>>;
+    fn inspect_repository(
+        &self,
+        path: &Path,
+        max_commits: usize,
+    ) -> ArgusResult<Option<GitSummary>>;
 }

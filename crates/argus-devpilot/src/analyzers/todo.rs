@@ -2,6 +2,7 @@
 
 use argus_core::domain::project::{FileEntry, TodoMarker};
 use argus_core::ports::filesystem::FileSystemPort;
+use rayon::prelude::*;
 use regex::Regex;
 use std::path::Path;
 use std::sync::OnceLock;
@@ -14,7 +15,7 @@ fn marker_regex() -> &'static Regex {
     })
 }
 
-/// Scans non-sensitive source files for TODO/FIXME/HACK/XXX markers.
+/// Scans non-sensitive source files in parallel with Rayon for TODO/FIXME/HACK/XXX markers.
 pub fn scan_todos(
     root: &Path,
     files: &[FileEntry],
@@ -23,40 +24,39 @@ pub fn scan_todos(
     cancel: &CancellationToken,
 ) -> Vec<TodoMarker> {
     let re = marker_regex();
-    let mut markers = Vec::new();
 
-    for entry in files {
-        if cancel.is_cancelled() {
-            break;
-        }
-        if entry.is_sensitive || entry.size_bytes > max_file_bytes {
-            continue;
-        }
-        if !is_scannable_text_ext(entry.extension.as_deref()) {
-            continue;
-        }
-        let Ok(content) = fs.read_text_file(root, &entry.relative_path, max_file_bytes) else {
-            continue;
-        };
-
-        for (idx, line) in content.lines().enumerate() {
-            if let Some(caps) = re.captures(line) {
-                let kind = caps
-                    .get(1)
-                    .map(|m| m.as_str().to_ascii_uppercase())
-                    .unwrap_or_else(|| "TODO".to_string());
-                let raw_text = caps.get(2).map(|m| m.as_str().trim()).unwrap_or_default();
-                // Trim overly long comments cleanly
-                let text: String = raw_text.chars().take(140).collect();
-                markers.push(TodoMarker {
-                    kind,
-                    file: entry.relative_path.clone(),
-                    line: idx + 1,
-                    text,
-                });
+    let mut markers: Vec<TodoMarker> = files
+        .par_iter()
+        .filter(|entry| {
+            !cancel.is_cancelled()
+                && !entry.is_sensitive
+                && entry.size_bytes <= max_file_bytes
+                && is_scannable_text_ext(entry.extension.as_deref())
+        })
+        .flat_map_iter(|entry| {
+            let Ok(content) = fs.read_text_file(root, &entry.relative_path, max_file_bytes) else {
+                return Vec::new();
+            };
+            let mut file_markers = Vec::new();
+            for (idx, line) in content.lines().enumerate() {
+                if let Some(caps) = re.captures(line) {
+                    let kind = caps
+                        .get(1)
+                        .map(|m| m.as_str().to_ascii_uppercase())
+                        .unwrap_or_else(|| "TODO".to_string());
+                    let raw_text = caps.get(2).map(|m| m.as_str().trim()).unwrap_or_default();
+                    let text: String = raw_text.chars().take(140).collect();
+                    file_markers.push(TodoMarker {
+                        kind,
+                        file: entry.relative_path.clone(),
+                        line: idx + 1,
+                        text,
+                    });
+                }
             }
-        }
-    }
+            file_markers
+        })
+        .collect();
 
     markers.sort_by(|a, b| a.file.cmp(&b.file).then_with(|| a.line.cmp(&b.line)));
     markers

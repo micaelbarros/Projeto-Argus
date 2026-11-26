@@ -4,7 +4,10 @@ use argus_core::domain::project::{Dependency, DetectedFramework, FileEntry};
 use std::collections::BTreeSet;
 
 /// Detects frameworks, runtimes, and build/DevOps tooling from project files & dependencies.
-pub fn detect_frameworks(files: &[FileEntry], dependencies: &[Dependency]) -> Vec<DetectedFramework> {
+pub fn detect_frameworks(
+    files: &[FileEntry],
+    dependencies: &[Dependency],
+) -> Vec<DetectedFramework> {
     let mut results = Vec::new();
     let mut seen = BTreeSet::new();
 
@@ -48,9 +51,7 @@ pub fn detect_frameworks(files: &[FileEntry], dependencies: &[Dependency]) -> Ve
             "manage.py" => push("Django", "Web Framework", rel.clone()),
             "go.mod" => push("Go Modules", "Build & Ecosystem", rel.clone()),
             "pom.xml" => push("Maven / Java", "Build & Ecosystem", rel.clone()),
-            "build.gradle" | "build.gradle.kts" => {
-                push("Gradle", "Build & Ecosystem", rel.clone())
-            }
+            "build.gradle" | "build.gradle.kts" => push("Gradle", "Build & Ecosystem", rel.clone()),
             "Dockerfile" | "Containerfile" => push("Docker", "Containerization", rel.clone()),
             "docker-compose.yml" | "docker-compose.yaml" | "compose.yml" | "compose.yaml" => {
                 push("Docker Compose", "Containerization", rel.clone())

@@ -6,9 +6,7 @@ use crate::theme::ArgusTheme;
 use crate::widgets;
 use argus_core::config::ArgusConfig;
 use argus_core::domain::alert::Alert;
-use argus_core::domain::network::{
-    ConnectionInfo, NetworkInterface, NetworkMetric, TransferRate,
-};
+use argus_core::domain::network::{ConnectionInfo, NetworkInterface, NetworkMetric, TransferRate};
 use argus_core::domain::project::{AnalysisRunRecord, ProjectAnalysis};
 use argus_core::errors::ArgusResult;
 use argus_core::ports::persistence::MetricsRepositoryPort;
@@ -99,10 +97,7 @@ impl ArgusTuiApp {
         }
         self.refresh_network(netscope);
         self.refresh_history(repo);
-        self.status_message = format!(
-            "Atualizado em {}",
-            chrono::Local::now().format("%H:%M:%S")
-        );
+        self.status_message = format!("Atualizado em {}", chrono::Local::now().format("%H:%M:%S"));
     }
 
     pub fn refresh_network(&mut self, netscope: &NetScopeService) {

@@ -35,8 +35,16 @@ fn analyzes_full_temporary_project_with_git_deps_todos_and_cycles() {
         "// TODO: refactor startup\nfn main() {\n    // FIXME: handle edge case\n    println!(\"hi\");\n}\n",
     )
     .unwrap();
-    fs::write(root.join("src/a.ts"), "import { b } from './b';\nexport const a = b;\n").unwrap();
-    fs::write(root.join("src/b.ts"), "import { a } from './a';\nexport const b = a;\n").unwrap();
+    fs::write(
+        root.join("src/a.ts"),
+        "import { b } from './b';\nexport const a = b;\n",
+    )
+    .unwrap();
+    fs::write(
+        root.join("src/b.ts"),
+        "import { a } from './a';\nexport const b = a;\n",
+    )
+    .unwrap();
     fs::write(root.join("tests/basic.rs"), "#[test]\nfn ok() {}\n").unwrap();
     // Should be ignored by ignored_dirs
     fs::write(root.join("node_modules/pkg/index.js"), "// TODO: ignored\n").unwrap();
@@ -71,19 +79,28 @@ fn analyzes_full_temporary_project_with_git_deps_todos_and_cycles() {
 
     // Verify language detection & ignored directory exclusion
     assert!(analysis.languages.iter().any(|l| l.language == "Rust"));
-    assert!(analysis.languages.iter().any(|l| l.language == "TypeScript"));
+    assert!(analysis
+        .languages
+        .iter()
+        .any(|l| l.language == "TypeScript"));
     assert!(!analysis
         .todos
         .iter()
         .any(|t| t.file.to_string_lossy().contains("node_modules")));
     // Verify .env content was NEVER scanned
-    assert!(!analysis.todos.iter().any(|t| t.text.contains("super_secret")));
+    assert!(!analysis
+        .todos
+        .iter()
+        .any(|t| t.text.contains("super_secret")));
     // Verify TODO / FIXME found in src/main.rs
     assert_eq!(analysis.todos.len(), 2);
     // Verify dependencies & frameworks detected
     assert!(analysis.dependencies.iter().any(|d| d.name == "serde"));
     assert!(analysis.frameworks.iter().any(|f| f.name == "Tokio"));
-    assert!(analysis.frameworks.iter().any(|f| f.name == "GitHub Actions"));
+    assert!(analysis
+        .frameworks
+        .iter()
+        .any(|f| f.name == "GitHub Actions"));
     // Verify circular dependency detected between src/a and src/b
     assert_eq!(analysis.circular_dependencies.len(), 1);
     // Verify Git summary populated

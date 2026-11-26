@@ -126,9 +126,9 @@ impl NetScopeService {
         let probe_count = count.clamp(1, 20);
         info!(target = %sanitized, count = probe_count, "Measuring latency");
 
-        let report = self
-            .monitor
-            .measure_latency(&sanitized, probe_count, timeout, port, cancel)?;
+        let report =
+            self.monitor
+                .measure_latency(&sanitized, probe_count, timeout, port, cancel)?;
 
         if let Some(repo) = &self.repo {
             if config.storage.database_enabled && config.netscope.history_enabled {

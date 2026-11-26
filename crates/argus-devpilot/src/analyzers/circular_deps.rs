@@ -17,9 +17,7 @@ fn js_import_re() -> &'static Regex {
 
 fn rust_use_re() -> &'static Regex {
     static RE: OnceLock<Regex> = OnceLock::new();
-    RE.get_or_init(|| {
-        Regex::new(r"\buse\s+crate::([a-zA-Z0-9_]+)").expect("valid rust use regex")
-    })
+    RE.get_or_init(|| Regex::new(r"\buse\s+crate::([a-zA-Z0-9_]+)").expect("valid rust use regex"))
 }
 
 fn py_import_re() -> &'static Regex {
@@ -147,10 +145,7 @@ fn normalize_rel_path(path: &Path) -> String {
     stack.join("/")
 }
 
-fn resolve_known_node(
-    candidate: &str,
-    known: &BTreeMap<String, PathBuf>,
-) -> Option<String> {
+fn resolve_known_node(candidate: &str, known: &BTreeMap<String, PathBuf>) -> Option<String> {
     let stripped = candidate
         .strip_suffix(".ts")
         .or_else(|| candidate.strip_suffix(".tsx"))
@@ -225,8 +220,7 @@ fn dfs(
                 if let Some(pos) = stack.iter().position(|n| n == next) {
                     let mut cycle = stack[pos..].to_vec();
                     // Canonicalize rotation so A->B->A and B->A->B deduplicate
-                    if let Some((min_idx, _)) =
-                        cycle.iter().enumerate().min_by(|a, b| a.1.cmp(b.1))
+                    if let Some((min_idx, _)) = cycle.iter().enumerate().min_by(|a, b| a.1.cmp(b.1))
                     {
                         cycle.rotate_left(min_idx);
                     }

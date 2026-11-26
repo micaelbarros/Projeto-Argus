@@ -61,7 +61,10 @@ pub fn render_help_modal(frame: &mut Frame<'_>, area: Rect, theme: ArgusTheme) {
     frame.render_widget(Clear, popup);
 
     let lines = vec![
-        Line::from(Span::styled("Atalhos do Projeto ARGUS", theme.title_style())),
+        Line::from(Span::styled(
+            "Atalhos do Projeto ARGUS",
+            theme.title_style(),
+        )),
         Line::from(""),
         Line::from("  1         Dashboard Geral"),
         Line::from("  2         DevPilot (Análise, Dependências, TODOs, Git)"),

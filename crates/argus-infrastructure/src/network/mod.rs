@@ -8,9 +8,7 @@ use argus_core::domain::network::{
 use argus_core::errors::{ArgusError, ArgusResult};
 use argus_core::ports::network::NetworkMonitorPort;
 use chrono::Utc;
-use netstat2::{
-    get_sockets_info, AddressFamilyFlags, ProtocolFlags, ProtocolSocketInfo, TcpState,
-};
+use netstat2::{get_sockets_info, AddressFamilyFlags, ProtocolFlags, ProtocolSocketInfo, TcpState};
 use std::collections::HashMap;
 use std::net::{IpAddr, Ipv4Addr, SocketAddr, TcpStream, ToSocketAddrs};
 use std::thread;
@@ -38,9 +36,7 @@ impl SystemNetworkAdapter {
             ))
         })?;
         addrs.next().ok_or_else(|| {
-            ArgusError::NetworkUnavailable(format!(
-                "Nenhum endereço IP retornado para '{target}'."
-            ))
+            ArgusError::NetworkUnavailable(format!("Nenhum endereço IP retornado para '{target}'."))
         })
     }
 
@@ -49,16 +45,16 @@ impl SystemNetworkAdapter {
     }
 
     fn parse_cidr_hosts(cidr: &str) -> ArgusResult<Vec<Ipv4Addr>> {
-        let (ip_str, prefix_str) = cidr.split_once('/').ok_or_else(|| {
-            ArgusError::ConfigurationError(format!("CIDR inválido: '{cidr}'"))
-        })?;
+        let (ip_str, prefix_str) = cidr
+            .split_once('/')
+            .ok_or_else(|| ArgusError::ConfigurationError(format!("CIDR inválido: '{cidr}'")))?;
         let base: Ipv4Addr = ip_str.parse().map_err(|_| {
             ArgusError::ConfigurationError(format!("IPv4 inválido no CIDR: '{cidr}'"))
         })?;
         let prefix: u8 = prefix_str.parse().map_err(|_| {
             ArgusError::ConfigurationError(format!("Prefixo inválido no CIDR: '{cidr}'"))
         })?;
-        if prefix < 24 || prefix > 32 {
+        if !(24..=32).contains(&prefix) {
             return Err(ArgusError::PermissionDenied(
                 "Descoberta restrita a blocos entre /24 e /32.".to_string(),
             ));
@@ -106,14 +102,12 @@ impl NetworkMonitorPort for SystemNetworkAdapter {
                 Some(mac)
             };
 
-            let status = if !ips.is_empty()
-                || data.total_received() > 0
-                || data.total_transmitted() > 0
-            {
-                InterfaceStatus::Up
-            } else {
-                InterfaceStatus::Down
-            };
+            let status =
+                if !ips.is_empty() || data.total_received() > 0 || data.total_transmitted() > 0 {
+                    InterfaceStatus::Up
+                } else {
+                    InterfaceStatus::Down
+                };
 
             out.push(NetworkInterface {
                 name: name.to_string(),

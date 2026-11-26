@@ -21,7 +21,10 @@ impl LocalFileSystemAdapter {
 
     fn resolve_within_root(&self, root: &Path, relative_path: &Path) -> ArgusResult<PathBuf> {
         for comp in relative_path.components() {
-            if matches!(comp, Component::ParentDir | Component::RootDir | Component::Prefix(_)) {
+            if matches!(
+                comp,
+                Component::ParentDir | Component::RootDir | Component::Prefix(_)
+            ) {
                 return Err(ArgusError::InvalidPath {
                     path: relative_path.to_path_buf(),
                     reason: "Caminho relativo inválido fora do diretório autorizado.".to_string(),

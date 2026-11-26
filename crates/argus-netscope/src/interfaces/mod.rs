@@ -12,9 +12,7 @@ pub fn sort_interfaces(mut interfaces: Vec<NetworkInterface>) -> Vec<NetworkInte
         };
         rank(a.status)
             .cmp(&rank(b.status))
-            .then_with(|| {
-                (b.bytes_received + b.bytes_sent).cmp(&(a.bytes_received + a.bytes_sent))
-            })
+            .then_with(|| (b.bytes_received + b.bytes_sent).cmp(&(a.bytes_received + a.bytes_sent)))
             .then_with(|| a.name.cmp(&b.name))
     });
     interfaces

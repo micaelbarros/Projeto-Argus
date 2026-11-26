@@ -61,13 +61,16 @@ impl AuthorizationPolicy {
                 "Prefixo /{prefix} excede o limite seguro de descoberta (/24 ou menor)."
             )));
         }
-        let authorized = self.allowed_cidrs.iter().any(|&(allowed_net, allowed_prefix)| {
-            if prefix < allowed_prefix {
-                return false;
-            }
-            let mask = prefix_to_mask(allowed_prefix);
-            (u32::from(net) & mask) == (u32::from(allowed_net) & mask)
-        });
+        let authorized = self
+            .allowed_cidrs
+            .iter()
+            .any(|&(allowed_net, allowed_prefix)| {
+                if prefix < allowed_prefix {
+                    return false;
+                }
+                let mask = prefix_to_mask(allowed_prefix);
+                (u32::from(net) & mask) == (u32::from(allowed_net) & mask)
+            });
         if !authorized {
             return Err(ArgusError::PermissionDenied(format!(
                 "Alvo '{cidr}' não está autorizado em netscope.authorized_cidrs."

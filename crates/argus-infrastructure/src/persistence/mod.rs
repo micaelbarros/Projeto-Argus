@@ -37,8 +37,9 @@ impl SQLiteMetricsAdapter {
 
     /// Creates an in-memory SQLite database (useful for tests).
     pub fn open_in_memory() -> ArgusResult<Self> {
-        let conn = Connection::open_in_memory()
-            .map_err(|e| ArgusError::DatabaseError(format!("Falha ao abrir SQLite em memória: {e}")))?;
+        let conn = Connection::open_in_memory().map_err(|e| {
+            ArgusError::DatabaseError(format!("Falha ao abrir SQLite em memória: {e}"))
+        })?;
         let adapter = Self {
             conn: Mutex::new(conn),
         };
@@ -97,7 +98,9 @@ impl SQLiteMetricsAdapter {
                 ON alerts(acknowledged, created_at DESC);
             ",
         )
-        .map_err(|e| ArgusError::DatabaseError(format!("Erro ao inicializar schema SQLite: {e}")))?;
+        .map_err(|e| {
+            ArgusError::DatabaseError(format!("Erro ao inicializar schema SQLite: {e}"))
+        })?;
 
         Ok(())
     }
@@ -343,7 +346,10 @@ impl MetricsRepositoryPort for SQLiteMetricsAdapter {
             .lock()
             .map_err(|_| ArgusError::DatabaseError("Mutex SQLite corrompido".to_string()))?;
         let updated = conn
-            .execute("UPDATE alerts SET acknowledged = 1 WHERE id = ?1", params![id])
+            .execute(
+                "UPDATE alerts SET acknowledged = 1 WHERE id = ?1",
+                params![id],
+            )
             .map_err(|e| ArgusError::DatabaseError(e.to_string()))?;
         Ok(updated > 0)
     }

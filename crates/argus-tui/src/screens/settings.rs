@@ -12,8 +12,14 @@ pub fn render(frame: &mut Frame<'_>, area: Rect, app: &ArgusTuiApp) {
         Line::from("Configuração ativa (TOML)"),
         Line::from(""),
         Line::from(format!("  [general] theme = \"{}\"", cfg.general.theme)),
-        Line::from(format!("  [general] language = \"{}\"", cfg.general.language)),
-        Line::from(format!("  [general] log_level = \"{}\"", cfg.general.log_level)),
+        Line::from(format!(
+            "  [general] language = \"{}\"",
+            cfg.general.language
+        )),
+        Line::from(format!(
+            "  [general] log_level = \"{}\"",
+            cfg.general.log_level
+        )),
         Line::from(""),
         Line::from(format!(
             "  [modules] devpilot_enabled = {}",

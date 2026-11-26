@@ -114,7 +114,10 @@ mod tests {
     #[test]
     fn detects_common_languages() {
         assert_eq!(detect_language(Path::new("src/main.rs")), Some("Rust"));
-        assert_eq!(detect_language(Path::new("web/app.tsx")), Some("TypeScript (TSX)"));
+        assert_eq!(
+            detect_language(Path::new("web/app.tsx")),
+            Some("TypeScript (TSX)")
+        );
         assert_eq!(detect_language(Path::new("Dockerfile")), Some("Docker"));
         assert_eq!(detect_language(Path::new("bin/blob.unknown")), None);
     }

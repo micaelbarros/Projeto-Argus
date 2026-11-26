@@ -91,7 +91,10 @@ impl ProjectAnalyzer for SecurityHygieneAnalyzer {
             Ok(vec![CustomFinding {
                 analyzer: self.name().to_string(),
                 category: "Hygiene".to_string(),
-                summary: format!("{} observação(ões) de higiene do repositório", details.len()),
+                summary: format!(
+                    "{} observação(ões) de higiene do repositório",
+                    details.len()
+                ),
                 details,
             }])
         }

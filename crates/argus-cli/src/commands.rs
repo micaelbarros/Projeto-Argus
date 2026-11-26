@@ -122,10 +122,9 @@ pub async fn execute(cli: Cli, cancel: CancellationToken) -> ArgusResult<()> {
                 }
             }
             DevPilotCommand::Git { path, commits } => {
-                let summary =
-                    container
-                        .devpilot
-                        .inspect_git(path, *commits, &container.config)?;
+                let summary = container
+                    .devpilot
+                    .inspect_git(path, *commits, &container.config)?;
                 if cli.json {
                     emit_json(&cli, &container, &summary)
                 } else {
@@ -270,7 +269,8 @@ pub async fn execute(cli: Cli, cancel: CancellationToken) -> ArgusResult<()> {
                                     .as_deref()
                                     .map(|e| format!(" ({e})"))
                                     .unwrap_or_default();
-                                let _ = writeln!(out, "  seq={} rtt={:.2} ms{}", s.sequence, ms, note);
+                                let _ =
+                                    writeln!(out, "  seq={} rtt={:.2} ms{}", s.sequence, ms, note);
                             }
                             None => {
                                 let _ = writeln!(
@@ -303,10 +303,9 @@ pub async fn execute(cli: Cli, cancel: CancellationToken) -> ArgusResult<()> {
             }
             NetScopeCommand::Connections { protocol } => {
                 let proto = protocol.map(Into::into);
-                let (conns, summary) =
-                    container
-                        .netscope
-                        .inspect_connections(proto, &container.config)?;
+                let (conns, summary) = container
+                    .netscope
+                    .inspect_connections(proto, &container.config)?;
                 if cli.json {
                     emit_json(
                         &cli,
@@ -329,10 +328,7 @@ pub async fn execute(cli: Cli, cancel: CancellationToken) -> ArgusResult<()> {
                             (Some(a), Some(p)) => format!("{a}:{p}"),
                             _ => "-".to_string(),
                         };
-                        let proc_label = c
-                            .process_name
-                            .as_deref()
-                            .unwrap_or("-");
+                        let proc_label = c.process_name.as_deref().unwrap_or("-");
                         let _ = writeln!(
                             out,
                             "  {:<4} {:<24} -> {:<24} {:<12} {}",
@@ -344,7 +340,11 @@ pub async fn execute(cli: Cli, cancel: CancellationToken) -> ArgusResult<()> {
                         );
                     }
                     if conns.len() > 50 {
-                        let _ = writeln!(out, "  ... e mais {} conexão(ões) (use --json para saída completa).", conns.len() - 50);
+                        let _ = writeln!(
+                            out,
+                            "  ... e mais {} conexão(ões) (use --json para saída completa).",
+                            conns.len() - 50
+                        );
                     }
                     emit_text(&cli, &container, &out)
                 }
@@ -388,7 +388,11 @@ pub async fn execute(cli: Cli, cancel: CancellationToken) -> ArgusResult<()> {
                     emit_json(&cli, &container, &hosts)
                 } else {
                     let mut out = String::new();
-                    let _ = writeln!(out, "Descoberta Autorizada ({cidr}) — {} host(s) ativo(s):", hosts.len());
+                    let _ = writeln!(
+                        out,
+                        "Descoberta Autorizada ({cidr}) — {} host(s) ativo(s):",
+                        hosts.len()
+                    );
                     for h in &hosts {
                         let _ = writeln!(
                             out,
@@ -486,7 +490,11 @@ pub async fn execute(cli: Cli, cancel: CancellationToken) -> ArgusResult<()> {
         Commands::Report { path, format, ping } => {
             let project_analysis = if container.config.modules.devpilot_enabled && path.exists() {
                 let req = AnalyzeRequest::new(path.clone());
-                Some(container.devpilot.analyze(&req, &container.config, &cancel)?)
+                Some(
+                    container
+                        .devpilot
+                        .analyze(&req, &container.config, &cancel)?,
+                )
             } else {
                 None
             };
@@ -524,7 +532,9 @@ pub async fn execute(cli: Cli, cancel: CancellationToken) -> ArgusResult<()> {
             } else {
                 (*format).into()
             };
-            let rendered = container.exporter.render_report(&report, effective_format)?;
+            let rendered = container
+                .exporter
+                .render_report(&report, effective_format)?;
             emit_text(&cli, &container, &rendered)
         }
     }
@@ -744,7 +754,11 @@ fn format_analysis_text(a: &ProjectAnalysis) -> String {
 
 fn format_health_text(name: &str, h: &HealthReport) -> String {
     let mut out = String::new();
-    let _ = writeln!(out, "DevPilot — Saúde de '{name}': {}/100 (Nota {})", h.score, h.grade);
+    let _ = writeln!(
+        out,
+        "DevPilot — Saúde de '{name}': {}/100 (Nota {})",
+        h.score, h.grade
+    );
     let _ = writeln!(out, "\nVerificações aprovadas:");
     for p in &h.passed_checks {
         let _ = writeln!(out, "  [OK] {p}");

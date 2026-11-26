@@ -29,7 +29,10 @@ async fn main() -> ExitCode {
         Ok(()) => ExitCode::SUCCESS,
         Err(err) => {
             if verbose {
-                eprintln!("Erro: {}\nDetalhes técnicos: {err:?}", err.friendly_message());
+                eprintln!(
+                    "Erro: {}\nDetalhes técnicos: {err:?}",
+                    err.friendly_message()
+                );
             } else {
                 eprintln!("Erro: {}", err.friendly_message());
             }
@@ -46,8 +49,8 @@ fn init_logging(verbose: bool, quiet: bool) {
     } else {
         "warn"
     };
-    let filter = EnvFilter::try_from_default_env()
-        .unwrap_or_else(|_| EnvFilter::new(default_level));
+    let filter =
+        EnvFilter::try_from_default_env().unwrap_or_else(|_| EnvFilter::new(default_level));
 
     let _ = tracing_subscriber::fmt()
         .with_env_filter(filter)

@@ -14,17 +14,27 @@ pub fn render(frame: &mut Frame<'_>, area: Rect, app: &ArgusTuiApp) {
         .constraints([Constraint::Length(3), Constraint::Min(6)])
         .split(area);
 
-    let sub_titles = ["Visão Geral & Saúde", "Dependências", "TODO / FIXME", "Git Insights"];
+    let sub_titles = [
+        "Visão Geral & Saúde",
+        "Dependências",
+        "TODO / FIXME",
+        "Git Insights",
+    ];
     let sub_idx = app.devpilot_subtab % sub_titles.len();
     let sub_tabs = Tabs::new(sub_titles)
-        .block(Block::default().borders(Borders::ALL).title(" DevPilot (Tab para alternar) "))
+        .block(
+            Block::default()
+                .borders(Borders::ALL)
+                .title(" DevPilot (Tab para alternar) "),
+        )
         .select(sub_idx)
         .highlight_style(app.theme.selected_tab_style());
     frame.render_widget(sub_tabs, chunks[0]);
 
     let Some(analysis) = &app.analysis else {
-        let empty = Paragraph::new("Nenhuma análise disponível. Pressione R para analisar o projeto.")
-            .block(Block::default().borders(Borders::ALL));
+        let empty =
+            Paragraph::new("Nenhuma análise disponível. Pressione R para analisar o projeto.")
+                .block(Block::default().borders(Borders::ALL));
         frame.render_widget(empty, chunks[1]);
         return;
     };
@@ -70,9 +80,11 @@ pub fn render(frame: &mut Frame<'_>, area: Rect, app: &ArgusTuiApp) {
                     )));
                 }
             }
-            let p = Paragraph::new(lines)
-                .scroll((app.scroll as u16, 0))
-                .block(Block::default().borders(Borders::ALL).title(" Saúde & Estrutura "));
+            let p = Paragraph::new(lines).scroll((app.scroll as u16, 0)).block(
+                Block::default()
+                    .borders(Borders::ALL)
+                    .title(" Saúde & Estrutura "),
+            );
             frame.render_widget(p, chunks[1]);
         }
         1 => {
@@ -86,7 +98,11 @@ pub fn render(frame: &mut Frame<'_>, area: Rect, app: &ArgusTuiApp) {
                         d.name.clone(),
                         d.version.clone(),
                         d.ecosystem.clone(),
-                        if d.is_dev { "dev".to_string() } else { "runtime".to_string() },
+                        if d.is_dev {
+                            "dev".to_string()
+                        } else {
+                            "runtime".to_string()
+                        },
                         d.manifest.clone(),
                     ])
                 })
@@ -134,14 +150,11 @@ pub fn render(frame: &mut Frame<'_>, area: Rect, app: &ArgusTuiApp) {
                     Constraint::Percentage(57),
                 ],
             )
-            .header(
-                Row::new(["Tipo", "Local", "Descrição"]).style(app.theme.header_style()),
-            )
-            .block(
-                Block::default()
-                    .borders(Borders::ALL)
-                    .title(format!(" Marcadores TODO / FIXME ({}) ", analysis.todos.len())),
-            );
+            .header(Row::new(["Tipo", "Local", "Descrição"]).style(app.theme.header_style()))
+            .block(Block::default().borders(Borders::ALL).title(format!(
+                " Marcadores TODO / FIXME ({}) ",
+                analysis.todos.len()
+            )));
             frame.render_widget(table, chunks[1]);
         }
         _ => {
@@ -150,7 +163,11 @@ pub fn render(frame: &mut Frame<'_>, area: Rect, app: &ArgusTuiApp) {
                 lines.push(Line::from(format!("Branch atual: {}", git.branch)));
                 lines.push(Line::from(format!(
                     "Estado: {} | Commits analisados: {} | Contribuidores: {}",
-                    if git.is_dirty { "Working tree com alterações" } else { "Limpo" },
+                    if git.is_dirty {
+                        "Working tree com alterações"
+                    } else {
+                        "Limpo"
+                    },
                     git.total_commits,
                     git.contributors.len()
                 )));
@@ -166,12 +183,18 @@ pub fn render(frame: &mut Frame<'_>, area: Rect, app: &ArgusTuiApp) {
                     )));
                 }
             } else {
-                lines.push(Line::from("Este diretório não faz parte de um repositório Git."));
+                lines.push(Line::from(
+                    "Este diretório não faz parte de um repositório Git.",
+                ));
             }
             let p = Paragraph::new(lines)
                 .style(Style::default().fg(app.theme.text))
                 .scroll((app.scroll as u16, 0))
-                .block(Block::default().borders(Borders::ALL).title(" Git Insights "));
+                .block(
+                    Block::default()
+                        .borders(Borders::ALL)
+                        .title(" Git Insights "),
+                );
             frame.render_widget(p, chunks[1]);
         }
     }

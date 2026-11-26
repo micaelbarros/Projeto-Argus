@@ -116,7 +116,10 @@ pub fn compute_health_report(
         issues.push(HealthIssue {
             code: "ARCH-001".to_string(),
             severity: HealthSeverity::Critical,
-            title: format!("{} dependência(s) circular(es) detectada(s)", circular_deps.len()),
+            title: format!(
+                "{} dependência(s) circular(es) detectada(s)",
+                circular_deps.len()
+            ),
             detail: "Ciclos entre módulos aumentam acoplamento e dificultam manutenção."
                 .to_string(),
             recommendation: "Extraia contratos/interfaces compartilhadas para quebrar os ciclos."
@@ -132,7 +135,10 @@ pub fn compute_health_report(
         issues.push(HealthIssue {
             code: "SIZE-001".to_string(),
             severity: HealthSeverity::Warning,
-            title: format!("{} arquivo(s) acima do limite configurado", large_files.len()),
+            title: format!(
+                "{} arquivo(s) acima do limite configurado",
+                large_files.len()
+            ),
             detail: "Arquivos muito grandes prejudicam revisão de código e tempo de clone."
                 .to_string(),
             recommendation: "Modularize arquivos extensos ou mova binários para fora do Git."

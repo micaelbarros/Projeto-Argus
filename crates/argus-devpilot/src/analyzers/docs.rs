@@ -17,9 +17,17 @@ pub fn generate_project_markdown(analysis: &ProjectAnalysis) -> String {
     let _ = writeln!(out, "## Visão Geral\n");
     let _ = writeln!(out, "| Métrica | Valor |");
     let _ = writeln!(out, "|---|---|");
-    let _ = writeln!(out, "| Arquivos analisados | {} |", analysis.project.total_files);
+    let _ = writeln!(
+        out,
+        "| Arquivos analisados | {} |",
+        analysis.project.total_files
+    );
     let _ = writeln!(out, "| Diretórios | {} |", analysis.project.total_dirs);
-    let _ = writeln!(out, "| Total de linhas | {} |", analysis.project.total_lines);
+    let _ = writeln!(
+        out,
+        "| Total de linhas | {} |",
+        analysis.project.total_lines
+    );
     let _ = writeln!(
         out,
         "| Tamanho total | {} |",
@@ -48,7 +56,11 @@ pub fn generate_project_markdown(analysis: &ProjectAnalysis) -> String {
     if !analysis.frameworks.is_empty() {
         let _ = writeln!(out, "## Frameworks e Ferramentas\n");
         for fw in &analysis.frameworks {
-            let _ = writeln!(out, "- **{}** ({}) — `{}`", fw.name, fw.category, fw.evidence);
+            let _ = writeln!(
+                out,
+                "- **{}** ({}) — `{}`",
+                fw.name, fw.category, fw.evidence
+            );
         }
         let _ = writeln!(out);
     }
@@ -90,7 +102,11 @@ pub fn generate_project_markdown(analysis: &ProjectAnalysis) -> String {
         let _ = writeln!(
             out,
             "- **Estado:** {}",
-            if git.is_dirty { "Alterações pendentes" } else { "Limpo" }
+            if git.is_dirty {
+                "Alterações pendentes"
+            } else {
+                "Limpo"
+            }
         );
         let _ = writeln!(out, "- **Commits analisados:** {}\n", git.total_commits);
         if !git.recent_commits.is_empty() {

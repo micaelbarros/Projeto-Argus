@@ -36,12 +36,14 @@ pub fn render(frame: &mut Frame<'_>, area: Rect, app: &ArgusTuiApp) {
             Constraint::Min(20),
         ],
     )
-    .header(Row::new(["ID", "Início (UTC)", "Status", "Saúde", "Projeto"]).style(app.theme.header_style()))
-    .block(
-        Block::default()
-            .borders(Borders::ALL)
-            .title(format!(" Histórico de Análises DevPilot ({}) ", app.analysis_history.len())),
-    );
+    .header(
+        Row::new(["ID", "Início (UTC)", "Status", "Saúde", "Projeto"])
+            .style(app.theme.header_style()),
+    )
+    .block(Block::default().borders(Borders::ALL).title(format!(
+        " Histórico de Análises DevPilot ({}) ",
+        app.analysis_history.len()
+    )));
     frame.render_widget(run_table, rows[0]);
 
     let metric_rows: Vec<Row<'_>> = app
@@ -71,12 +73,12 @@ pub fn render(frame: &mut Frame<'_>, area: Rect, app: &ArgusTuiApp) {
         ],
     )
     .header(
-        Row::new(["Hora", "Interface / Alvo", "RX", "TX", "Latência"]).style(app.theme.header_style()),
+        Row::new(["Hora", "Interface / Alvo", "RX", "TX", "Latência"])
+            .style(app.theme.header_style()),
     )
-    .block(
-        Block::default()
-            .borders(Borders::ALL)
-            .title(format!(" Histórico de Métricas NetScope ({}) ", app.metric_history.len())),
-    );
+    .block(Block::default().borders(Borders::ALL).title(format!(
+        " Histórico de Métricas NetScope ({}) ",
+        app.metric_history.len()
+    )));
     frame.render_widget(metric_table, rows[1]);
 }

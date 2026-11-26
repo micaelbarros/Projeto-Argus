@@ -18,11 +18,7 @@ pub fn render(frame: &mut Frame<'_>, area: Rect, app: &ArgusTuiApp) {
         ])
         .split(area);
 
-    let health_score = app
-        .analysis
-        .as_ref()
-        .map(|a| a.health.score)
-        .unwrap_or(0);
+    let health_score = app.analysis.as_ref().map(|a| a.health.score).unwrap_or(0);
     let health_label = app
         .analysis
         .as_ref()

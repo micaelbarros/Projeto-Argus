@@ -98,7 +98,8 @@ impl DevPilotService {
             return Err(ArgusError::Cancelled);
         }
 
-        let large_files = detect_large_files(&scanned.files, config.devpilot.large_file_threshold_kb);
+        let large_files =
+            detect_large_files(&scanned.files, config.devpilot.large_file_threshold_kb);
         let circular_dependencies = detect_circular_dependencies(
             &scanned.canonical_root,
             &scanned.files,
