@@ -96,10 +96,11 @@ impl FileSystemPort for LocalFileSystemAdapter {
         })?;
 
         let ignored_dirs = options.ignored_dirs.clone();
+        let ignore_hidden = options.ignore_hidden;
         let mut builder = WalkBuilder::new(&canonical_root);
         builder
             .follow_links(false)
-            .hidden(options.ignore_hidden)
+            .hidden(false)
             .git_ignore(options.respect_gitignore)
             .git_global(options.respect_gitignore)
             .git_exclude(options.respect_gitignore)
@@ -113,6 +114,12 @@ impl FileSystemPort for LocalFileSystemAdapter {
                 }
                 if let Some(name) = entry.file_name().to_str() {
                     if ignored_dirs.iter().any(|ig| ig == name) {
+                        return false;
+                    }
+                    if ignore_hidden
+                        && name.starts_with('.')
+                        && !matches!(name, ".gitignore" | ".github" | ".env.example")
+                    {
                         return false;
                     }
                 }

@@ -11,7 +11,8 @@ use tokio_util::sync::CancellationToken;
 fn marker_regex() -> &'static Regex {
     static RE: OnceLock<Regex> = OnceLock::new();
     RE.get_or_init(|| {
-        Regex::new(r"(?i)\b(TODO|FIXME|HACK|XXX)\b\s*[:\-]?\s*(.*)").expect("valid marker regex")
+        Regex::new(r"(?i)(?://|#|/\*|--)\s*\b(TODO|FIXME|HACK|XXX)\b\s*[:\-]?\s*(.*)")
+            .expect("valid marker regex")
     })
 }
 
