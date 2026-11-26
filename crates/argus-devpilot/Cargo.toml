@@ -1,0 +1,22 @@
+[package]
+name = "argus-devpilot"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+authors.workspace = true
+description = "DevPilot software engineering and repository analysis module for Projeto ARGUS."
+
+[dependencies]
+argus-core.workspace = true
+chrono.workspace = true
+rayon.workspace = true
+regex.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+tokio-util.workspace = true
+toml.workspace = true
+tracing.workspace = true
+
+[dev-dependencies]
+tempfile.workspace = true
